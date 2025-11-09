@@ -1,0 +1,14 @@
+# Monitoring window in minutes; must be longer than the cron interval
+window_minutes: 20
+
+# Polymarket wallet addresses to watch (Polygon addresses)
+addresses:
+  - "0xf2f6af4f27ec2dcf4072095ab804016e14cd5817"  # gopfan2
+
+email:
+  to: "sokhaar313@gmail.com"
+  subject_prefix: "[Polymarket Watch]"
+
+filters:
+  min_size: null  # e.g. 50 (USDC)
+  sides: []  # e.g. ["BUY", "SELL"]; empty array means no side filter
