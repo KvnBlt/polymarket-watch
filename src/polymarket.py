@@ -67,37 +67,49 @@ def fetch_trades(address: str, since_epoch: int) -> List[Dict[str, Any]]:
 
 
 def format_trades_for_email(trades_by_address: Mapping[str, Sequence[Mapping[str, Any]]]) -> str:
-    """Return a plain-text email body summarising trades per address."""
+    """Return a plain-text email body summarising trades per address in a clear, visual format."""
     blocks: List[str] = []
+    
     for address, trades in trades_by_address.items():
         if not trades:
             continue
+        
         sorted_trades = sorted(trades, key=lambda item: item.get("timestamp", 0), reverse=True)
-        lines = [f"Address: {address}"]
+        blocks.append("=" * 80)  # Visual separator
+        blocks.append(f"🔍 TRADES PAR {address}")
+        blocks.append("=" * 80)
+        blocks.append("")  # Empty line for readability
+        
         for trade in sorted_trades:
-            ts_iso = _format_timestamp(trade.get("timestamp"))
+            # Format timestamp in a more readable way
+            timestamp = trade.get("timestamp")
+            if timestamp:
+                dt = datetime.fromtimestamp(float(timestamp), tz=timezone.utc).astimezone()
+                time_str = dt.strftime("%d/%m/%Y %H:%M:%S")
+            else:
+                time_str = "Heure inconnue"
+            
+            # Get trade details
             side = str(trade.get("side", "") or "").upper()
-            outcome = trade.get("outcome")
+            side_emoji = "🟢" if side == "BUY" else "🔴" if side == "SELL" else "⚪"
             size = _format_decimal(trade.get("size"))
             price = _format_decimal(trade.get("price"))
-            title = trade.get("title") or trade.get("marketSlug") or trade.get("eventSlug") or "Unknown market"
-            slug = trade.get("marketSlug") or trade.get("eventSlug")
-            tx_hash = trade.get("txHash") or trade.get("id") or "n/a"
-            pieces = [
-                ts_iso,
-                side if side else "N/A",
-                f"outcome={outcome}" if outcome else "",
-                f"size={size}" if size else "",
-                f"price={price}" if price else "",
-                f"title=\"{title}\"",
+            title = trade.get("title") or trade.get("marketSlug") or trade.get("eventSlug") or "Marché inconnu"
+            
+            # Format block in a clear, visual way
+            trade_block = [
+                f"⏰ {time_str}",
+                f"{side_emoji} Action: {side}",
+                f"💰 Montant: {size} USDC",
+                f"💵 Prix: {price} USDC",
+                f"🎲 Marché: {title}",
+                ""  # Empty line between trades
             ]
-            if slug:
-                pieces.append(f"slug={slug}")
-            pieces.append(f"tx={tx_hash}")
-            filtered = [piece for piece in pieces if piece]
-            lines.append(" - " + " | ".join(filtered))
-        blocks.append("\n".join(lines))
-    return "\n\n".join(blocks)
+            blocks.extend(trade_block)
+            blocks.append("-" * 40)  # Visual separator between trades
+            blocks.append("")  # Empty line for readability
+            
+    return "\n".join(blocks)
 
 
 def _request_json(endpoint: str, params: Mapping[str, Any]) -> Any:
