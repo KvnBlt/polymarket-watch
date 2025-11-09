@@ -1,5 +1,5 @@
 # Monitoring window in minutes; must be longer than the cron interval
-window_minutes: 20
+window_minutes: 15  # Set to match the GitHub Actions schedule
 
 # Polymarket wallet addresses to watch (Polygon addresses)
 addresses:
