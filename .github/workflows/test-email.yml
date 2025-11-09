@@ -27,6 +27,6 @@ jobs:
         pip install -r requirements.txt
         
     - name: Run email test
-      env:
-        PYTHONPATH: ${{ github.workspace }}
-      run: python tests/test_email_connection.py
+      run: |
+        export PYTHONPATH=$PYTHONPATH:${{ github.workspace }}/src
+        python tests/test_email_connection.py
