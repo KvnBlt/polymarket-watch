@@ -1,6 +1,8 @@
-from emailer import send_email
+import pytest
+from src.emailer import send_email
 
 def test_smtp_connection():
+    """Test SMTP connection and email sending functionality."""
     smtp_conf = {
         "timeout": 30,
         "use_starttls": True
@@ -13,10 +15,6 @@ def test_smtp_connection():
             subject="Test Email Connection",
             body="This is a test email from your Polymarket Watch application. If you receive this, the SMTP configuration is working correctly!"
         )
-        print("Email sent successfully!")
+        assert True, "Email sent successfully"
     except Exception as e:
-        print(f"Failed to send email: {str(e)}")
-        raise
-
-if __name__ == "__main__":
-    test_smtp_connection()
+        pytest.fail(f"Failed to send email: {str(e)}")
