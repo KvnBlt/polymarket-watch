@@ -20,7 +20,7 @@ from src.polymarket import (
     reset_api_call_count,
 )
 
-BASE_DIR = Path(__file__).resolve().parents[1]
+BASE_DIR = Path(os.getcwd())  # Use current working directory
 DEFAULT_CONFIG = BASE_DIR / "config.yaml"
 logger = logging.getLogger("polymarket_watch")
 
