@@ -25,7 +25,8 @@ jobs:
     - name: Install dependencies
       run: |
         pip install -r requirements.txt
-        pip install -e .
         
     - name: Run email test
+      env:
+        PYTHONPATH: ${{ github.workspace }}
       run: python tests/test_email_connection.py
