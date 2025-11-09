@@ -13,7 +13,6 @@ jobs:
       SMTP_USER: ${{ secrets.SMTP_USER }}
       SMTP_PASS: ${{ secrets.SMTP_PASS }}
       SMTP_FROM: ${{ secrets.SMTP_FROM }}
-      PYTHONPATH: ${{ github.workspace }}
 
     steps:
     - uses: actions/checkout@v3
@@ -27,7 +26,9 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-        pip install -e .
-        
+
+    - name: Add src to PYTHONPATH
+      run: echo "PYTHONPATH=$PYTHONPATH:$(pwd)/src" >> $GITHUB_ENV
+
     - name: Run email test
-      run: python -m pytest tests/test_email_connection.py -v
+      run: python tests/test_email_connection.py
