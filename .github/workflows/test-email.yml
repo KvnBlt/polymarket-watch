@@ -31,4 +31,7 @@ jobs:
       run: echo "PYTHONPATH=$PYTHONPATH:$(pwd)/src" >> $GITHUB_ENV
 
     - name: Run email test
-      run: python tests/test_email_connection.py
+      run: |
+        python -u tests/test_email_connection.py
+      env:
+        PYTHONUNBUFFERED: "1"
