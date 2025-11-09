@@ -96,12 +96,20 @@ def format_trades_for_email(trades_by_address: Mapping[str, Sequence[Mapping[str
             price = _format_decimal(trade.get("price"))
             title = trade.get("title") or trade.get("marketSlug") or trade.get("eventSlug") or "Marché inconnu"
             
+            # Calculate number of shares (size/price)
+            try:
+                shares = float(size) / float(price) if size and price and float(price) != 0 else None
+                shares_str = f"{shares:,.0f}" if shares is not None else "N/A"
+            except (TypeError, ValueError):
+                shares_str = "N/A"
+
             # Format block in a clear, visual way
             trade_block = [
                 f"⏰ {time_str}",
                 f"{side_emoji} Action: {side}",
-                f"💰 Montant: {size} USDC",
-                f"💵 Prix: {price} USDC",
+                f"🎯 Parts: {shares_str}",
+                f"💰 Montant Total: {size} USDC",
+                f"💵 Prix par part: {price} USDC",
                 f"🎲 Marché: {title}",
                 ""  # Empty line between trades
             ]
