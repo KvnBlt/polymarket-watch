@@ -12,8 +12,8 @@ from typing import Any, Dict, Iterable, List, Mapping
 import yaml
 from dotenv import load_dotenv
 
-from .emailer import send_email
-from .polymarket import (
+from src.emailer import send_email
+from src.polymarket import (
     fetch_trades,
     format_trades_for_email,
     get_api_call_count,

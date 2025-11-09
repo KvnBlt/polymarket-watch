@@ -33,6 +33,8 @@ jobs:
       run: echo "PYTHONPATH=$PYTHONPATH:$(pwd)" >> $GITHUB_ENV
 
     - name: Run trade watcher
-      run: python -u src/main.py
+      run: |
+        export PYTHONPATH=$PYTHONPATH:$(pwd)
+        python -u src/main.py
       env:
         PYTHONUNBUFFERED: "1"
