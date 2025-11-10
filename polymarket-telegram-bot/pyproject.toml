@@ -1,9 +1,0 @@
-[build-system]
-requires = ["setuptools>=42","wheel"]
-build-backend = "setuptools.build_meta"
-
-[project]
-name = "polymarket-telegram-bot"
-version = "0.1.0"
-description = "Telegram alert bot for Polymarket trades"
-authors = [ { name = "", email = "" } ]
